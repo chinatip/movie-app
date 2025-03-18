@@ -1,6 +1,8 @@
+import { GetMovieDetailRequest } from "./types";
+
 export const API_URL = '/api';
 
-export async function fetchMovies() {
+export async function GetMovieList() {
   try {
     const response = await fetch(`${API_URL}/movies`);
 
@@ -12,9 +14,15 @@ export async function fetchMovies() {
     }
 }
 
-export async function fetchMovieDetail() {
+export async function GetMovieDetail(requestBody: GetMovieDetailRequest) {
     try {
-        const response = await fetch(`${API_URL}/movie`);
+        const response = await fetch(`${API_URL}/movie`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody)
+        });
 
         if (!response.ok) throw new Error('Failed to fetch movie details');
 

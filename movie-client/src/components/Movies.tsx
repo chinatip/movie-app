@@ -1,19 +1,13 @@
 import { useEffect, useState } from 'react';
-import { fetchMovies } from '../api';
-
-interface Movie {
-  id: string;
-  title: string;
-  year: string;
-  poster: string;
-}
+import { GetMovieList } from '../api';
+import { Movie } from '../types';
 
 const Movies = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
     async function loadMovies() {
-        const data = await fetchMovies();
+        const data = await GetMovieList();
         console.log("Fetched Movies:", data);
 
         if (data && data.movieList && Array.isArray(data.movieList)) {
