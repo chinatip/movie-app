@@ -26,10 +26,10 @@ namespace MovieApi.Services
                 ?? throw new InvalidOperationException($"Missing required Movie API Url: {_movieApiUrl} in .env file.");
         }
 
-        public async Task<FetchMovieDetailResponse> FetchMovieDetailAsync(MovieProvider provider, string id)
+        public async Task<FetchMovieDetailResponse> FetchMovieDetailAsync(MovieProvider provider, string movieId)
         {
-            string cacheKey = $"MovieDetail_{provider}_{id}";
-            string endpoint = $"{ProviderHelper.GetProviderName(provider)}/movie/{id}";
+            string cacheKey = $"MovieDetail_{provider}_{movieId}";
+            string endpoint = $"{ProviderHelper.GetProviderName(provider)}/movie/{movieId}";
 
             var fetchedMovieDetail = await FetchFromApi<FetchMovieDetailResponse>(endpoint, cacheKey)
                 ?? new FetchMovieDetailResponse();
