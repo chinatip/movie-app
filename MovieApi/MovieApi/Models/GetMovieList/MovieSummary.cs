@@ -7,7 +7,6 @@
         public string ID { get; set; }
         public string Type { get; set; }
         public string Poster { get; set; }
-
-        public List<MovieProvider> Providers { get; set; } = new();
+        public MovieProvider Provider { get; set; }
     }
 }

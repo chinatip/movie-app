@@ -8,8 +8,8 @@ namespace MovieApi.Helpers
         {
             return provider switch
             {
-                MovieProvider.CinemaWorld => "cinemaworld",
-                MovieProvider.FilmWorld => "filmworld",
+                MovieProvider.CinemaWorld => "CinemaWorld",
+                MovieProvider.FilmWorld => "FilmWorld",
                 _ => throw new ArgumentException("Unknown provider", nameof(provider))
             };
         }

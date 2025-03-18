@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MovieApi.Models;
+using MovieApi.Models.GetMovieList;
 using MovieApi.Services;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MovieApi.Controllers
 {
@@ -20,11 +18,11 @@ namespace MovieApi.Controllers
         }
 
         [HttpGet("movies")]
-        public async Task<ActionResult<IEnumerable<MovieSummary>>> GetMovieListAsync()
+        public async Task<ActionResult<GetMovieListResponse>> GetMovieListAsync()
         {
             var movies = await _movieService.GetMovieListAsync();
 
-            if (!movies.Any())
+            if (movies == null)
             {
                 return NotFound("No movies found.");
             }
@@ -32,10 +30,17 @@ namespace MovieApi.Controllers
             return Ok(movies);
         }
 
-        [HttpGet("movie/{id}")]
-        public async Task<IActionResult> GetMovieDetailAsync(int id)
-        {
-            return null;
-        }
+        //[HttpGet("movie/{id}")]
+        //public async Task<ActionResult> GetMovieDetailAsync(int id)
+        //{
+        //    var movieDetail = await _movieService.GetMovieAsync();
+
+        //    if (movieDetail == null)
+        //    {
+        //        return NotFound("No movie detail found.");
+        //    }
+
+        //    return Ok(movieDetail);
+        //}
     }
 }
