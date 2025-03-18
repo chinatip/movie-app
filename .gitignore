@@ -1,0 +1,9 @@
+# Ignore Visual Studio-specific files
+.vs/
+
+.env
+.txt
+
+logs/
+bin/
+obj/
