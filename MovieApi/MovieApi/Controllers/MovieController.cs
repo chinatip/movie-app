@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieApi.Models;
+using MovieApi.Models.GetMovieDetail;
 using MovieApi.Models.GetMovieList;
 using MovieApi.Services;
 
@@ -9,9 +11,9 @@ namespace MovieApi.Controllers
     public class MovieController : ControllerBase
     {
         private readonly ILogger<MovieController> _logger;
-        private readonly IMovieService _movieService;
+        private readonly IMovieAggregatorService _movieService;
 
-        public MovieController(ILogger<MovieController> logger, IMovieService movieService)
+        public MovieController(ILogger<MovieController> logger, IMovieAggregatorService movieService)
         {
             _logger = logger;
             _movieService = movieService;
@@ -30,17 +32,17 @@ namespace MovieApi.Controllers
             return Ok(movies);
         }
 
-        //[HttpGet("movie/{id}")]
-        //public async Task<ActionResult> GetMovieDetailAsync(int id)
-        //{
-        //    var movieDetail = await _movieService.GetMovieAsync();
+        [HttpGet("movie/{id}")]
+        public async Task<ActionResult<GetMovieDetailResponse>> GetMovieDetailAsync(GetMovieDetailRequest request)
+        {
+            var movieDetail = await _movieService.GetMovieDetailAsync(request);
 
-        //    if (movieDetail == null)
-        //    {
-        //        return NotFound("No movie detail found.");
-        //    }
+            if (movieDetail == null)
+            {
+                return NotFound("No movie detail found.");
+            }
 
-        //    return Ok(movieDetail);
-        //}
+            return Ok(movieDetail);
+        }
     }
 }

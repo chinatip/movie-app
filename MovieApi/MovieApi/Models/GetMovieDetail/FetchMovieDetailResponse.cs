@@ -1,6 +1,6 @@
-﻿namespace MovieApi.Models
+﻿namespace MovieApi.Models.GetMovieDetail
 {
-    public class MovieDetail
+    public class FetchMovieDetailResponse
     {
         public string Title { get; set; }
         public string Year { get; set; }
@@ -21,12 +21,6 @@
         public int Votes { get; set; }
         public string ID { get; set; }
         public string Type { get; set; }
-        public List<Price> Prices { get; set; }
-    }
-
-    public class Price
-    {
-        public MovieProvider Provider { get; set; }
-        public decimal PriceValue { get; set; }
+        public decimal Price { get; set; }
     }
 }
