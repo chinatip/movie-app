@@ -10,19 +10,11 @@ const string apiAccessToken = "API_ACCESS_TOKEN";
 var token = Env.GetString(apiAccessToken)
     ?? throw new InvalidOperationException($"Missing required API token: {apiAccessToken} in .env file.");
 
+builder.Services.AddMemoryCache();
 
-builder.Services.AddHttpClient<IMovieService, MovieService>(client =>
-{
-    if (!string.IsNullOrEmpty(token))
-    {
-        client.DefaultRequestHeaders.Add("x-access-token", token);
-    }
-
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
-
-builder.Services.AddScoped<IMovieService, MovieService>();
-
+builder.Services.AddHttpClient<IMovieProviderService, MovieProviderService>();
+builder.Services.AddScoped<IMovieProviderService, MovieProviderService>();
+builder.Services.AddScoped<IMovieAggregatorService, MovieAggregatorService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

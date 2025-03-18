@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieApi.Models;
+using MovieApi.Models.GetMovieDetail;
+using MovieApi.Models.GetMovieList;
 using MovieApi.Services;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MovieApi.Controllers
 {
@@ -11,20 +11,20 @@ namespace MovieApi.Controllers
     public class MovieController : ControllerBase
     {
         private readonly ILogger<MovieController> _logger;
-        private readonly IMovieService _movieService;
+        private readonly IMovieAggregatorService _movieService;
 
-        public MovieController(ILogger<MovieController> logger, IMovieService movieService)
+        public MovieController(ILogger<MovieController> logger, IMovieAggregatorService movieService)
         {
             _logger = logger;
             _movieService = movieService;
         }
 
         [HttpGet("movies")]
-        public async Task<IActionResult> GetCinemaworldMoviesAsync()
+        public async Task<ActionResult<GetMovieListResponse>> GetMovieListAsync()
         {
-            var movies = await _movieService.GetCinemaworldMoviesAsync();
+            var movies = await _movieService.GetMovieListAsync();
 
-            if (movies == null || !movies.Any())
+            if (movies == null)
             {
                 return NotFound("No movies found.");
             }
@@ -32,10 +32,17 @@ namespace MovieApi.Controllers
             return Ok(movies);
         }
 
-        [HttpGet("movie/{id}")]
-        public string Get(int id)
+        [HttpPost("movie")]
+        public async Task<ActionResult<GetMovieDetailResponse>> GetMovieDetailAsync([FromBody] GetMovieDetailRequest request)
         {
-            return "value";
+            var movieDetail = await _movieService.GetMovieDetailAsync(request);
+
+            if (movieDetail == null)
+            {
+                return NotFound("No movie detail found.");
+            }
+
+            return Ok(movieDetail);
         }
     }
 }
