@@ -1,6 +1,7 @@
 using DotNetEnv;
 using Serilog;
 using MovieApi.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
