@@ -1,4 +1,5 @@
 ﻿using DotNetEnv;
+using MovieApi.Helpers;
 using MovieApi.Models;
 using System.Net.Http;
 using System.Text.Json;
@@ -20,9 +21,52 @@ namespace MovieApi.Services
                 ?? throw new InvalidOperationException($"Missing required Movie API Url: {_movieApiUrl} in .env file.");
         }
 
-        public async Task<IEnumerable<MovieSummary>> GetCinemaworldMoviesAsync()
+        public async Task<IEnumerable<MovieSummary>> GetMovieListAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{_movieApiUrl}/cinemaworld/movies");
+            var cinemaWorldTask = GetMoviesAsync(MovieProvider.CinemaWorld);
+            var filmWorldTask = GetMoviesAsync(MovieProvider.FilmWorld);
+
+            var results = await Task.WhenAll(cinemaWorldTask, filmWorldTask);
+
+            var cinemaWorldMovies = results[0].Select(m => {
+                m.Providers ??= new List<MovieProvider>();
+                m.Providers.Add(MovieProvider.CinemaWorld);
+                return m;
+            });
+
+            var filmWorldMovies = results[1].Select(m => {
+                m.Providers ??= new List<MovieProvider>();
+                m.Providers.Add(MovieProvider.FilmWorld);
+                return m;
+            });
+
+            var mergedMovieList = cinemaWorldMovies.Concat(filmWorldMovies)
+                .GroupBy(m => m.Title)
+                .Select(group =>
+                {
+                    var movie = group.First();
+                    movie.Providers = group.SelectMany(m => m.Providers).Distinct().ToList();
+                    return movie;
+                })
+                .ToList();
+
+            return mergedMovieList;
+        }
+
+        private async Task<IEnumerable<MovieSummary>> GetFilmworldMoviesAsync()
+        {
+            return (List<MovieSummary>) await GetMoviesAsync(MovieProvider.FilmWorld);
+        }
+
+        private async Task<IEnumerable<MovieSummary>> GetCinemaworldMoviesAsync()
+        {
+            return (List<MovieSummary>) await GetMoviesAsync(MovieProvider.CinemaWorld);
+        }
+
+        private async Task<IEnumerable<MovieSummary>> GetMoviesAsync(MovieProvider provider)
+        {
+            string url = $"{_movieApiUrl}/{ProviderHelper.GetProviderName(provider)}/movies"; 
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
 
             if (!string.IsNullOrEmpty(_apiToken))
             {

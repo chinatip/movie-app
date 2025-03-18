@@ -4,6 +4,6 @@ namespace MovieApi.Services
 {
     public interface IMovieService
     {
-        Task<IEnumerable<MovieSummary>> GetCinemaworldMoviesAsync();
+        Task<IEnumerable<MovieSummary>> GetMovieListAsync();
     }
 }

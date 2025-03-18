@@ -20,11 +20,11 @@ namespace MovieApi.Controllers
         }
 
         [HttpGet("movies")]
-        public async Task<IActionResult> GetCinemaworldMoviesAsync()
+        public async Task<ActionResult<IEnumerable<MovieSummary>>> GetMovieListAsync()
         {
-            var movies = await _movieService.GetCinemaworldMoviesAsync();
+            var movies = await _movieService.GetMovieListAsync();
 
-            if (movies == null || !movies.Any())
+            if (!movies.Any())
             {
                 return NotFound("No movies found.");
             }
@@ -33,9 +33,9 @@ namespace MovieApi.Controllers
         }
 
         [HttpGet("movie/{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetMovieDetailAsync(int id)
         {
-            return "value";
+            return null;
         }
     }
 }
