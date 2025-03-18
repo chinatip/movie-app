@@ -2,6 +2,7 @@
 {
     public class GetMovieDetailResponse
     {
+        public string? ID { get; set; }
         public string Title { get; set; }
         public string Year { get; set; }
         public string Rated { get; set; }
@@ -16,17 +17,17 @@
         public string Country { get; set; }
         public string? Awards { get; set; }
         public string Poster { get; set; }
-        public int Metascore { get; set; }
-        public double Rating { get; set; }
-        public int Votes { get; set; }
-        public string ID { get; set; }
+        public string Metascore { get; set; }
+        public string Rating { get; set; }
+        public string Votes { get; set; }
         public string Type { get; set; }
-        public List<Price> Prices { get; set; }
+        public List<ProviderPrice> ProviderPrices { get; set; }
     }
 
-    public class Price
+    public class ProviderPrice
     {
         public MovieProvider Provider { get; set; }
+        public string ProviderName { get; set; }
         public decimal PriceValue { get; set; }
     }
 }

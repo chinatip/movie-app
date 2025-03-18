@@ -32,8 +32,8 @@ namespace MovieApi.Controllers
             return Ok(movies);
         }
 
-        [HttpGet("movie/{id}")]
-        public async Task<ActionResult<GetMovieDetailResponse>> GetMovieDetailAsync(GetMovieDetailRequest request)
+        [HttpPost("movie")]
+        public async Task<ActionResult<GetMovieDetailResponse>> GetMovieDetailAsync([FromBody] GetMovieDetailRequest request)
         {
             var movieDetail = await _movieService.GetMovieDetailAsync(request);
 

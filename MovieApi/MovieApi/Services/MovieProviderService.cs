@@ -37,7 +37,11 @@ namespace MovieApi.Services
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<FetchMovieDetailResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new FetchMovieDetailResponse();
+            var fetchedMovieDetail = JsonSerializer.Deserialize<FetchMovieDetailResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new FetchMovieDetailResponse();
+            fetchedMovieDetail.Provider = provider;
+
+
+            return fetchedMovieDetail;
         }
 
         public async Task<IEnumerable<MovieSummary>> FetchMovieListAsync(MovieProvider provider)

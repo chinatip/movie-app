@@ -8,6 +8,6 @@
         public string Type { get; set; }
         public string Poster { get; set; }
 
-        public List<ProviderDetail> ProviderDetails { get; set; }
+        public List<MovieProviderDetail> ProviderDetails { get; set; }
     }
 }

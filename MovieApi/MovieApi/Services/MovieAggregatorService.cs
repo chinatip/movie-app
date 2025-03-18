@@ -54,7 +54,7 @@ namespace MovieApi.Services
                         Type = representativeMovie.Type,
                         Poster = representativeMovie.Poster,
 
-                        ProviderDetails = group.Select(m => new ProviderDetail
+                        ProviderDetails = group.Select(m => new MovieProviderDetail
                         {
                             ProviderID = m.Provider,
                             ProviderName = ProviderHelper.GetProviderName(m.Provider),
@@ -69,13 +69,12 @@ namespace MovieApi.Services
                 MovieList = groupedMoviesByTitle
             };
             
-
             return response;
         }
 
         public async Task<GetMovieDetailResponse> GetMovieDetailAsync(GetMovieDetailRequest request)
         {
-            var tasks = request.ProviderDetails
+            var tasks = request.MovieSourceInfos
                 .Select(provider => _movieProviderService.FetchMovieDetailAsync(provider.ProviderID, provider.MovieID))
                 .ToList();
 
@@ -85,8 +84,7 @@ namespace MovieApi.Services
             {
                 return new GetMovieDetailResponse();
             }
-
-
+            
             var movieDetail = results[0];
 
             if (string.IsNullOrEmpty(movieDetail.Awards))
@@ -97,9 +95,38 @@ namespace MovieApi.Services
                     .FirstOrDefault(a => !string.IsNullOrEmpty(a)) ?? null;
             }
 
+            var providerPrices = results
+                .Where(result => result != null)
+                .Select(result => new ProviderPrice
+                {
+                    Provider = result.Provider,
+                    ProviderName = ProviderHelper.GetProviderName(result.Provider),
+                    PriceValue = decimal.Parse(result.Price)
+                })
+                .ToList();
+
+
             var response = new GetMovieDetailResponse
             {
-                
+                Title = movieDetail.Title,
+                Year = movieDetail.Year,
+                Rated = movieDetail.Rated,
+                Released = movieDetail.Released,
+                Runtime = movieDetail.Runtime,
+                Genre = movieDetail.Genre,
+                Director = movieDetail.Director,
+                Writer = movieDetail.Writer,
+                Actors = movieDetail.Actors,
+                Plot = movieDetail.Plot,
+                Language = movieDetail.Language,
+                Country = movieDetail.Country,
+                Awards = movieDetail.Awards,
+                Poster = movieDetail.Poster,
+                Metascore = movieDetail.Metascore,
+                Rating = movieDetail.Rating,
+                Votes = movieDetail.Votes,
+                Type = movieDetail.Type,
+                ProviderPrices = providerPrices
             };
 
             return response;
