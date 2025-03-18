@@ -1,15 +1,42 @@
+using DotNetEnv;
+using Serilog;
+using MovieApi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Env.Load();
+
+const string apiAccessToken = "API_ACCESS_TOKEN";
+var token = Env.GetString(apiAccessToken)
+    ?? throw new InvalidOperationException($"Missing required API token: {apiAccessToken} in .env file.");
+
+
+builder.Services.AddHttpClient<IMovieService, MovieService>(client =>
+{
+    if (!string.IsNullOrEmpty(token))
+    {
+        client.DefaultRequestHeaders.Add("x-access-token", token);
+    }
+
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/api-log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

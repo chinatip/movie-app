@@ -4,7 +4,6 @@
 .env
 .txt
 
+logs/
 bin/
 obj/
-*.log
-.env
