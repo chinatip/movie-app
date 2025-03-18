@@ -12,14 +12,10 @@ namespace MovieApi.Services
     public class MovieAggregatorService : IMovieAggregatorService
     {
         private readonly IMovieProviderService _movieProviderService;
-        private readonly IMemoryCache _cache;
-        private readonly string _apiToken;
-        private readonly string _movieApiUrl;
 
-        public MovieAggregatorService(IMovieProviderService movieProviderService, IMemoryCache cache)
+        public MovieAggregatorService(IMovieProviderService movieProviderService)
         {
             _movieProviderService = movieProviderService;
-            _cache = cache;
         }
 
         public async Task<GetMovieListResponse> GetMovieListAsync()

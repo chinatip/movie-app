@@ -11,12 +11,15 @@ namespace MovieApi.Services
     public class MovieProviderService: IMovieProviderService
     {
         private readonly HttpClient _httpClient;
+        private readonly IMemoryCache _cache;
         private readonly string _apiToken;
         private readonly string _movieApiUrl;
+        private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30);
 
         public MovieProviderService(HttpClient httpClient, IMemoryCache cache)
         {
             _httpClient = httpClient;
+            _cache = cache;
             _apiToken = Environment.GetEnvironmentVariable("API_ACCESS_TOKEN")
                 ?? throw new InvalidOperationException($"Missing required API token: {_apiToken} in .env file.");
             _movieApiUrl = Environment.GetEnvironmentVariable("MOVIE_API_URL")
@@ -25,28 +28,33 @@ namespace MovieApi.Services
 
         public async Task<FetchMovieDetailResponse> FetchMovieDetailAsync(MovieProvider provider, string id)
         {
-            string url = $"{_movieApiUrl}/{ProviderHelper.GetProviderName(provider)}/movie/{id}";
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            string cacheKey = $"MovieDetail_{provider}_{id}";
+            string endpoint = $"{ProviderHelper.GetProviderName(provider)}/movie/{id}";
 
-            if (!string.IsNullOrEmpty(_apiToken))
-            {
-                request.Headers.Add("x-access-token", _apiToken);
-            }
+            var fetchedMovieDetail = await FetchFromApi<FetchMovieDetailResponse>(endpoint, cacheKey)
+                ?? new FetchMovieDetailResponse();
 
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-
-            var json = await response.Content.ReadAsStringAsync();
-            var fetchedMovieDetail = JsonSerializer.Deserialize<FetchMovieDetailResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new FetchMovieDetailResponse();
             fetchedMovieDetail.Provider = provider;
-
-
             return fetchedMovieDetail;
         }
 
         public async Task<IEnumerable<MovieSummary>> FetchMovieListAsync(MovieProvider provider)
         {
-            string url = $"{_movieApiUrl}/{ProviderHelper.GetProviderName(provider)}/movies";
+            string cacheKey = $"MovieList_{provider}";
+            string endpoint = $"{ProviderHelper.GetProviderName(provider)}/movies";
+
+            var fetchedMovies = await FetchFromApi<FetchMovieListResponse>(endpoint, cacheKey);
+            return fetchedMovies?.Movies ?? new List<MovieSummary>();
+        }
+
+        private async Task<T?> FetchFromApi<T>(string endpoint, string cacheKey)
+        {
+            if (_cache.TryGetValue(cacheKey, out T cachedData))
+            {
+                return cachedData;
+            }
+
+            string url = $"{_movieApiUrl}/{endpoint}";
             var request = new HttpRequestMessage(HttpMethod.Get, url);
 
             if (!string.IsNullOrEmpty(_apiToken))
@@ -58,7 +66,14 @@ namespace MovieApi.Services
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<FetchMovieListResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })?.Movies ?? new List<MovieSummary>();
+            var result =  JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (result != null)
+            {
+                _cache.Set(cacheKey, result, _cacheDuration);
+            }
+
+            return result;
         }
     }
 }

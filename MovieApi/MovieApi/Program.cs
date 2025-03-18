@@ -12,7 +12,6 @@ var token = Env.GetString(apiAccessToken)
     ?? throw new InvalidOperationException($"Missing required API token: {apiAccessToken} in .env file.");
 
 builder.Services.AddMemoryCache();
-
 builder.Services.AddHttpClient<IMovieProviderService, MovieProviderService>();
 builder.Services.AddScoped<IMovieProviderService, MovieProviderService>();
 builder.Services.AddScoped<IMovieAggregatorService, MovieAggregatorService>();
