@@ -1,42 +1,38 @@
 import { useEffect, useState } from 'react';
 import { GetMovieList } from '../api';
-import { Movie } from '../types';
+import { MovieSummaryWithProviders } from '@/types';
+import { MovieCard } from './MovieCard';
 
-const Movies = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+const MovieList = () => {
+  const [movies, setMovies] = useState<MovieSummaryWithProviders[]>([]);
 
   useEffect(() => {
-    async function loadMovies() {
+    const loadMovies = async () => {
+      try {
         const data = await GetMovieList();
-        console.log("Fetched Movies:", data);
 
-        if (data && data.movieList && Array.isArray(data.movieList)) {
-            setMovies(data.movieList);
-        } else {
-            setMovies([]);
-        }
-    }
+        setMovies(data?.movieList ?? []);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+        setMovies([]);
+      }
+    };
 
     loadMovies();
   }, []);
 
+  const renderMovieList = () => {
+    if (movies.length === 0) return <p>No movies found.</p>;
+  
+    return movies.map((movie) => <MovieCard key={movie.id} movie={movie} />);
+  };
+
   return (
     <div>
         <h1>Movie List</h1>
-        {movies.length > 0 ? (
-        <ul>
-            {movies.map((movie) => (
-            <li key={movie.id}>
-                <img src={movie.poster} alt={movie.title} width="100" />
-                <p>{movie.title} ({movie.year})</p>
-            </li>
-            ))}
-        </ul>
-        ) : (
-            <p>No movies found.</p>
-        )}
+        {renderMovieList()}
     </div>
   );
 };
 
-export default Movies;
+export default MovieList;

@@ -1,14 +1,10 @@
 import './App.css'
-import MovieDetail from './components/MovieDetail'
-import Movies from './components/Movies'
+import MovieList from './components/MovieList'
 
 function App() {
   return (
     <>
-      <Movies />
-      -----------------------------------------
-      -----------------------------------------
-      <MovieDetail />
+      <MovieList />
     </>
   )
 }

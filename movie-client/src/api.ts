@@ -1,20 +1,24 @@
-import { GetMovieDetailRequest } from "./types";
+import { GetMovieDetailRequest, GetMovieDetailResponse, GetMovieListResponse } from "./types";
 
 export const API_URL = '/api';
 
-export async function GetMovieList() {
-  try {
-    const response = await fetch(`${API_URL}/movies`);
+export async function GetMovieList(): Promise<GetMovieListResponse> {
+    try {
+      const response = await fetch(`${API_URL}/movies`);
+  
+      if (!response.ok) throw new Error("Failed to fetch movies");
+  
+      const data: GetMovieListResponse = await response.json();
 
-    if (!response.ok) throw new Error('Failed to fetch movies');
-        return await response.json();
+      return data;
     } catch (error) {
-        console.error('API Error:', error);
-        return [];
+      console.error("API Error:", error);
+  
+      return { movieList: [] };
     }
-}
+  }
 
-export async function GetMovieDetail(requestBody: GetMovieDetailRequest) {
+export async function GetMovieDetail(requestBody: GetMovieDetailRequest): Promise<GetMovieDetailResponse | null> {
     try {
         const response = await fetch(`${API_URL}/movie`, {
             method: "POST",
