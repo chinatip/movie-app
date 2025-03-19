@@ -1,4 +1,5 @@
 ### **Movie API and Frontend Setup Guide**
+A web application that compares movie prices from multiple providers and displays the cheapest option for users. Built with ASP.NET for the backend and Vite with TypeScript for the frontend.
 
 ## **Backend (API) - ASP.NET**
 1. **Run the API:**  
