@@ -70,7 +70,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         <AccordionItem value="item-1">
           <AccordionTrigger>MovieDetails</AccordionTrigger>
           <AccordionContent>
-          <MovieDetail movieDetail={movieDetail} />
+            <MovieDetail movieDetail={movieDetail} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

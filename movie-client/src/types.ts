@@ -28,11 +28,11 @@ export interface GetMovieDetailResponse {
     language: string;
     country: string;
     awards?: string;
-    poster: string;
+    // poster: string;
     metascore: string;
     rating: string;
     votes: string;
-    type: string;
+    // type: string;
     providerPrices: ProviderPrice[];
 }
 
