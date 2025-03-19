@@ -2,7 +2,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
@@ -62,11 +61,30 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       loadMovieDetail();
   }, []);
 
+  const renderImage = () => {
+    const [imgError, setImgError] = useState(false);
+    return imgError ? (
+        <div 
+            className="w-[100px] h-[153px] flex items-center justify-center border text-center border-gray-400 text-sm text-gray-500"
+        >
+            Image Not Found
+        </div>
+    ) : (
+        <img
+            src={poster} 
+            alt={title} 
+            width="100" 
+            height="153"
+            onError={() => setImgError(true)}
+        />
+    );
+  }
+
   const renderMovieDetail = () => {
     if (!movieDetail) return
 
     return (
-      <Accordion type="single" collapsible>
+      <Accordion type="single" collapsible className="min-w-2xs sm:min-w-md sm:max-w-md lg:min-w-lg lg:max-w-lg">
         <AccordionItem value="item-1">
           <AccordionTrigger>MovieDetails</AccordionTrigger>
           <AccordionContent>
@@ -82,31 +100,37 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     const { providerPrices } = movieDetail;
     return (
       <>
-        {providerPrices.map(priceItem => <p>Provider: {priceItem.providerName}, price: {priceItem.priceValue}</p>)}
+        <p><strong>Price</strong></p>
+        {providerPrices.map(priceItem => <p>{priceItem.providerName}: {priceItem.priceValue}</p>)}
       </>
     )
   }
 
-  const renderContent = () => {
-    return (
-      <CardContent key={id}>
-        <img src={poster} alt={title} width="100" />
-        {renderPriceList()}
-        {renderMovieDetail()}
-      </CardContent>
-    )
-  }
+  const renderContent = () => (
+    <CardContent>
+      {renderPriceList()}
+      {renderMovieDetail()}
+    </CardContent>
+  )
+
+  const renderHeader = () => (
+    <CardHeader className="min-w-2xs sm:min-w-md sm:max-w-md lg:min-w-lg lg:max-w-lg">
+      <div className="flex flex-col sm:flex-row">
+        <div className="size-full min-w-[100px] min-h-[153px] mb-4 sm:mr-4 sm:mb-0 flex justify-center">
+          {renderImage()}
+        </div>
+        <div>
+          <CardTitle className="mb-4">{title}</CardTitle>
+          {movieDetail && movieDetail.plot && <CardDescription>{movieDetail.plot}</CardDescription>}
+        </div>
+      </div>
+    </CardHeader>
+  )
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{year}</CardDescription>
-      </CardHeader>
+    <Card className="text-left mb-4">
+      {renderHeader()}
       {renderContent()}
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
     </Card>
     )
   }

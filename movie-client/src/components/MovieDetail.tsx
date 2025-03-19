@@ -7,13 +7,11 @@ interface MovieDetailProps {
 const MovieDetail: React.FC<MovieDetailProps> = ({ movieDetail }) => {
     if (!movieDetail) return;
 
-    const { year, rated, released, director, writer, actors, language, country, awards, metascore, rating, votes } = movieDetail
+    const { year, director, writer, actors, language, country, awards, metascore, rating, votes } = movieDetail
 
     return (
         <ul>
             <li><strong>Year:</strong> {year}</li>
-            <li><strong>Rated:</strong> {rated}</li>
-            <li><strong>Released:</strong> {released}</li>
             <li><strong>Director:</strong> {director}</li>
             <li><strong>Writer:</strong> {writer}</li>
             <li><strong>Actors:</strong> {actors}</li>
