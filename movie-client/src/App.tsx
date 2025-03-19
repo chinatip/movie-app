@@ -1,16 +1,12 @@
-import './App.css'
-import MovieDetail from './components/MovieDetail'
-import Movies from './components/Movies'
+import "./App.css";
+import MovieList from "./components/MovieList";
 
 function App() {
   return (
     <>
-      <Movies />
-      -----------------------------------------
-      -----------------------------------------
-      <MovieDetail />
+      <MovieList />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
