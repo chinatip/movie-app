@@ -41,12 +41,10 @@
 
 ## **Screenshots**
 ### **Desktop Preview**
-![Desktop Screenshot 1](screenshots/desktop1.png)
-![Desktop Screenshot 2](screenshots/desktop2.png)
+![Desktop Screenshot 1](screenshots/desktop1.png) ![Desktop Screenshot 2](screenshots/desktop2.png)
 
 ### **Mobile Preview**
-![Mobile Screenshot 1](screenshots/mobile1.png)
-![Mobile Screenshot 2](screenshots/mobile2.png)
+![Mobile Screenshot 1](screenshots/mobile1.png) ![Mobile Screenshot 2](screenshots/mobile2.png)
 ---
 
 ### **Additional Notes**
