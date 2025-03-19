@@ -1,11 +1,11 @@
-﻿using DotNetEnv;
+﻿using System.Net.Http;
+using System.Text.Json;
+using DotNetEnv;
 using Microsoft.Extensions.Caching.Memory;
 using MovieApi.Helpers;
 using MovieApi.Models;
 using MovieApi.Models.GetMovieDetail;
 using MovieApi.Models.GetMovieList;
-using System.Net.Http;
-using System.Text.Json;
 
 namespace MovieApi.Services
 {
@@ -25,12 +25,14 @@ namespace MovieApi.Services
 
             var results = await Task.WhenAll(cinemaWorldTask, filmWorldTask);
 
-            var cinemaWorldMovies = results[0].Select(m => {
+            var cinemaWorldMovies = results[0].Select(m =>
+            {
                 m.Provider = MovieProvider.CinemaWorld;
                 return m;
             }).ToList();
 
-            var filmWorldMovies = results[1].Select(m => {
+            var filmWorldMovies = results[1].Select(m =>
+            {
                 m.Provider = MovieProvider.FilmWorld;
                 return m;
             }).ToList();
@@ -64,7 +66,7 @@ namespace MovieApi.Services
             {
                 MovieList = groupedMoviesByTitle
             };
-            
+
             return response;
         }
 
@@ -80,7 +82,7 @@ namespace MovieApi.Services
             {
                 return new GetMovieDetailResponse();
             }
-            
+
             var movieDetail = results[0];
 
             if (string.IsNullOrEmpty(movieDetail.Awards))

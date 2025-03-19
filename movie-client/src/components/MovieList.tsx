@@ -29,7 +29,7 @@ const MovieList = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold font-stretch-50%">
+      <h1 className="text-2xl font-bold sm:text-3xl">
         Find the Best Movie Deals
       </h1>
       <div className="mt-6">{renderMovieList()}</div>

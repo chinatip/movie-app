@@ -1,14 +1,14 @@
-﻿using MovieApi.Helpers;
-using MovieApi.Models.GetMovieDetail;
-using MovieApi.Models.GetMovieList;
-using MovieApi.Models;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Memory;
+using MovieApi.Helpers;
+using MovieApi.Models;
+using MovieApi.Models.GetMovieDetail;
+using MovieApi.Models.GetMovieList;
 
 namespace MovieApi.Services
 {
-    public class MovieProviderService: IMovieProviderService
+    public class MovieProviderService : IMovieProviderService
     {
         private readonly HttpClient _httpClient;
         private readonly IMemoryCache _cache;
@@ -66,7 +66,7 @@ namespace MovieApi.Services
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            var result =  JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (result != null)
             {
