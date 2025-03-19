@@ -1,21 +1,27 @@
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-  } from "@/components/ui/card"
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@/components/ui/accordion"
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import MovieCardDetails from "./MovieCardDetails";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GetMovieDetail } from "../api";
-import { MovieSummaryWithProviders, GetMovieDetailRequest, GetMovieDetailResponse, MovieProviderDetail, MovieSourceInfo } from "../types";
+import {
+  MovieSummaryWithProviders,
+  GetMovieDetailRequest,
+  GetMovieDetailResponse,
+  MovieProviderDetail,
+  MovieSourceInfo,
+} from "../types";
 import { PriceComparisonTable } from "./PriceComparisonTable";
 import { MoviePoster } from "./MoviePoster";
 
@@ -24,50 +30,56 @@ interface MovieCardProps {
 }
 
 export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
-  const [movieDetail, setMovieDetail] = useState<GetMovieDetailResponse | null>(null);
+  const [movieDetail, setMovieDetail] = useState<GetMovieDetailResponse | null>(
+    null,
+  );
   const { title, poster, providerDetails } = movie;
 
-  const mapRequest = (): GetMovieDetailRequest | null => {
-      if (providerDetails.length === 0) return null;
-  
-      const movieSources: MovieSourceInfo[] = providerDetails.map((provider: MovieProviderDetail) => ({
-          ProviderID: provider.providerID,
-          MovieID: provider.movieID,
-      }));
-  
-      return {
-          MovieSourceInfos: movieSources
-      };
-  };
+  const mapRequest = useCallback((): GetMovieDetailRequest | null => {
+    if (providerDetails.length === 0) return null;
+
+    const movieSources: MovieSourceInfo[] = providerDetails.map(
+      (provider: MovieProviderDetail) => ({
+        ProviderID: provider.providerID,
+        MovieID: provider.movieID,
+      }),
+    );
+
+    return {
+      MovieSourceInfos: movieSources,
+    };
+  }, [providerDetails]); // Add dependencies
 
   const fetchAndUpdate = async (request: GetMovieDetailRequest | null) => {
-      if (!request) return
+    if (!request) return;
 
-      try {
-          const data = await GetMovieDetail(request);
-          
-          setMovieDetail(data ?? null);
-      } catch (error) {
-          console.error("Error fetching movie details:", error);
+    try {
+      const data = await GetMovieDetail(request);
 
-          setMovieDetail(null);
-      }
-  }
+      setMovieDetail(data ?? null);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+
+      setMovieDetail(null);
+    }
+  };
 
   useEffect(() => {
-      const loadMovieDetail = async () => {
-          const request = mapRequest();
-          fetchAndUpdate(request);
-      };
+    const request = mapRequest();
+    if (!request) return;
 
-      loadMovieDetail();
-  }, []);
+    fetchAndUpdate(request);
+  }, [mapRequest]);
 
   const renderMovieDetail = () => {
-    if (!movieDetail) return
+    if (!movieDetail) return;
 
     return (
-      <Accordion type="single" collapsible className="min-w-2xs sm:min-w-md sm:max-w-md lg:min-w-lg lg:max-w-lg">
+      <Accordion
+        type="single"
+        collapsible
+        className="min-w-2xs sm:min-w-md sm:max-w-md lg:min-w-lg lg:max-w-lg"
+      >
         <AccordionItem value="item-1">
           <AccordionTrigger>Movie Details</AccordionTrigger>
           <AccordionContent>
@@ -75,15 +87,17 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    )
-  }
+    );
+  };
 
   const renderContent = () => (
     <CardContent>
-      {movieDetail && <PriceComparisonTable providerPrices={movieDetail.providerPrices} />}
+      {movieDetail && (
+        <PriceComparisonTable providerPrices={movieDetail.providerPrices} />
+      )}
       {renderMovieDetail()}
     </CardContent>
-  )
+  );
 
   const renderHeader = () => (
     <CardHeader className="min-w-2xs sm:min-w-md sm:max-w-md lg:min-w-lg lg:max-w-lg">
@@ -93,17 +107,18 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         </div>
         <div className="size-full">
           <CardTitle className="mb-4">{title}</CardTitle>
-          {movieDetail && movieDetail.plot && <CardDescription>{movieDetail.plot}</CardDescription>}
+          {movieDetail && movieDetail.plot && (
+            <CardDescription>{movieDetail.plot}</CardDescription>
+          )}
         </div>
       </div>
     </CardHeader>
-  )
+  );
 
   return (
     <Card className="text-left mb-4">
       {renderHeader()}
       {renderContent()}
     </Card>
-    )
-  }
-  
+  );
+};
