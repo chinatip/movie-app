@@ -1,5 +1,10 @@
 ﻿namespace MovieApi.Models
 {
+    public class FetchMovieListResponse
+    {
+        public List<MovieSummary> Movies { get; set; } = new List<MovieSummary>();
+    }
+
     public class MovieSummary
     {
         public string Title { get; set; }

@@ -1,5 +1,4 @@
 ﻿using MovieApi.Models;
-using MovieApi.Models.GetMovieDetail;
 
 namespace MovieApi.Services
 {

@@ -1,4 +1,4 @@
-﻿namespace MovieApi.Models.GetMovieList
+﻿namespace MovieApi.Models
 {
     public class MovieProviderDetail
     {

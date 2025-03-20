@@ -3,8 +3,6 @@ using System.Text.Json;
 using Microsoft.Extensions.Caching.Memory;
 using MovieApi.Helpers;
 using MovieApi.Models;
-using MovieApi.Models.GetMovieDetail;
-using MovieApi.Models.GetMovieList;
 
 namespace MovieApi.Services
 {

@@ -2,18 +2,11 @@ export enum MovieProvider {
   CinemaWorld = 0,
   FilmWorld = 1,
 }
-
-// GetMovieDetail --start
-export interface MovieSourceInfo {
-  ProviderID: MovieProvider;
-  MovieID: string;
+export interface GetMovieListResponse {
+  movieList: MovieDetail[];
 }
 
-export interface GetMovieDetailRequest {
-  MovieSourceInfos: MovieSourceInfo[];
-}
-
-export interface GetMovieDetailResponse {
+export interface MovieDetail {
   id?: string;
   title: string;
   year: string;
@@ -28,37 +21,16 @@ export interface GetMovieDetailResponse {
   language: string;
   country: string;
   awards?: string;
-  // poster: string;
+  poster: string;
   metascore: string;
   rating: string;
   votes: string;
-  // type: string;
-  providerPrices: ProviderPrice[];
+  type: string;
+  prices: Price[];
 }
 
-export interface ProviderPrice {
+export interface Price {
   provider: MovieProvider;
   providerName: string;
-  priceValue: number;
+  value: number;
 }
-
-// GetMovieDetail --end
-// GetMovieList --start
-export interface GetMovieListResponse {
-  movieList: MovieSummaryWithProviders[];
-}
-
-export interface MovieSummaryWithProviders {
-  id: number;
-  title: string;
-  year: string;
-  type: string;
-  poster: string;
-  providerDetails: MovieProviderDetail[];
-}
-
-export interface MovieProviderDetail {
-  providerID: MovieProvider;
-  movieID: string;
-}
-// GetMovieList --end

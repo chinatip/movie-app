@@ -1,8 +1,8 @@
-﻿namespace MovieApi.Models.GetMovieDetail
+﻿namespace MovieApi.Models
 {
-    public class FetchMovieDetailResponse
+    public class MovieDetail
     {
-        public string ID { get; set; }
+        public int ID { get; set; }
         public string Title { get; set; }
         public string Year { get; set; }
         public string Rated { get; set; }
@@ -21,7 +21,13 @@
         public string Rating { get; set; }
         public string Votes { get; set; }
         public string Type { get; set; }
-        public string Price { get; set; }
+        public List<Price> Prices { get; set; }
+    }
+
+    public class Price
+    {
         public MovieProvider Provider { get; set; }
+        public string ProviderName { get; set; }
+        public decimal Value { get; set; }
     }
 }

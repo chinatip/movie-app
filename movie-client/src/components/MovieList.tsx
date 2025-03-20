@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { GetMovieList } from "../api";
-import { MovieSummaryWithProviders } from "@/types";
+import { MovieDetail } from "@/types";
 import { MovieCard } from "./MovieCard";
+import { GetMovieList } from "@/api";
 
 const MovieList = () => {
-  const [movies, setMovies] = useState<MovieSummaryWithProviders[]>([]);
+  const [movies, setMovies] = useState<MovieDetail[]>([]);
 
   useEffect(() => {
     const loadMovies = async () => {
