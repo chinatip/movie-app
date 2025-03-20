@@ -1,7 +1,7 @@
-import { ProviderPrice } from "@/types";
+import { Price } from "@/types";
 
 export const PriceComparisonTable: React.FC<{
-  providerPrices: ProviderPrice[];
+  providerPrices: Price[];
 }> = ({ providerPrices }) => {
   if (!providerPrices || providerPrices.length == 0) return;
 

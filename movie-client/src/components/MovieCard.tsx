@@ -13,73 +13,24 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import MovieCardDetails from "./MovieCardDetails";
-import { useCallback, useEffect, useState } from "react";
-import { GetMovieDetail } from "../api";
 import {
-  MovieSummaryWithProviders,
-  GetMovieDetailRequest,
-  GetMovieDetailResponse,
-  MovieProviderDetail,
-  MovieSourceInfo,
+  MovieDetail,
 } from "../types";
 import { PriceComparisonTable } from "./PriceComparisonTable";
 import { MoviePoster } from "./MoviePoster";
 
-interface MovieCardProps {
-  movie: MovieSummaryWithProviders;
-}
+export const MovieCard: React.FC<{ movie: MovieDetail }> = ({ movie }) => {
+  if (!movie) return;
 
-export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
-  const [movieDetail, setMovieDetail] = useState<GetMovieDetailResponse | null>(
-    null,
-  );
-  const { title, poster, providerDetails } = movie;
+  const { title, poster, plot } = movie;
 
-  const mapRequest = useCallback((): GetMovieDetailRequest | null => {
-    if (providerDetails.length === 0) return null;
-
-    const movieSources: MovieSourceInfo[] = providerDetails.map(
-      (provider: MovieProviderDetail) => ({
-        ProviderID: provider.providerID,
-        MovieID: provider.movieID,
-      }),
-    );
-
-    return {
-      MovieSourceInfos: movieSources,
-    };
-  }, [providerDetails]); // Add dependencies
-
-  const fetchAndUpdate = async (request: GetMovieDetailRequest | null) => {
-    if (!request) return;
-
-    try {
-      const data = await GetMovieDetail(request);
-
-      setMovieDetail(data ?? null);
-    } catch (error) {
-      console.error("Error fetching movie details:", error);
-
-      setMovieDetail(null);
-    }
-  };
-
-  useEffect(() => {
-    const request = mapRequest();
-    if (!request) return;
-
-    fetchAndUpdate(request);
-  }, [mapRequest]);
-
-  const renderMovieDetail = () => {
-    if (!movieDetail) return;
-
+  const renderMovieDetail = () => {    
     return (
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>Movie Details</AccordionTrigger>
           <AccordionContent>
-            <MovieCardDetails movieDetail={movieDetail} />
+            <MovieCardDetails movieDetail={movie} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
@@ -88,8 +39,8 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
 
   const renderContent = () => (
     <CardContent>
-      {movieDetail && (
-        <PriceComparisonTable providerPrices={movieDetail.providerPrices} />
+      {movie && (
+        <PriceComparisonTable providerPrices={movie.prices} />
       )}
       {renderMovieDetail()}
     </CardContent>
@@ -103,9 +54,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         </div>
         <div className="size-full">
           <CardTitle className="mb-4">{title}</CardTitle>
-          {movieDetail && movieDetail.plot && (
-            <CardDescription>{movieDetail.plot}</CardDescription>
-          )}
+          <CardDescription>{plot}</CardDescription>
         </div>
       </div>
     </CardHeader>
