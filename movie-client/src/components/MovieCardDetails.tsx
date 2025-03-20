@@ -1,10 +1,12 @@
 import { MovieDetail } from "../types";
 
-interface MovieCardDetailsProps{
-  movieDetail: MovieDetail
+interface MovieCardDetailsProps {
+  movieDetail: MovieDetail;
 }
 
-export const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({ movieDetail }) => {
+export const MovieCardDetails: React.FC<MovieCardDetailsProps> = ({
+  movieDetail,
+}) => {
   if (!movieDetail) return;
 
   const {

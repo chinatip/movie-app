@@ -13,9 +13,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import MovieCardDetails from "./MovieCardDetails";
-import {
-  MovieDetail,
-} from "../types";
+import { MovieDetail } from "../types";
 import { PriceComparisonTable } from "./PriceComparisonTable";
 import { MoviePoster } from "./MoviePoster";
 
@@ -24,7 +22,7 @@ export const MovieCard: React.FC<{ movie: MovieDetail }> = ({ movie }) => {
 
   const { title, poster, plot } = movie;
 
-  const renderMovieDetail = () => {    
+  const renderMovieDetail = () => {
     return (
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
@@ -39,9 +37,7 @@ export const MovieCard: React.FC<{ movie: MovieDetail }> = ({ movie }) => {
 
   const renderContent = () => (
     <CardContent>
-      {movie && (
-        <PriceComparisonTable providerPrices={movie.prices} />
-      )}
+      {movie && <PriceComparisonTable providerPrices={movie.prices} />}
       {renderMovieDetail()}
     </CardContent>
   );

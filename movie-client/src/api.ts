@@ -1,6 +1,4 @@
-import {
-  GetMovieListResponse,
-} from "./types";
+import { GetMovieListResponse } from "./types";
 
 export const API_URL = "/api";
 
