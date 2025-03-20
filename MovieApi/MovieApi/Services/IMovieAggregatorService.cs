@@ -8,6 +8,8 @@ namespace MovieApi.Services
     {
         Task<GetMovieListResponse> GetMovieListAsync();
 
+        Task<GetMovieListResponse2> GetMovieListAsync2();
+
         Task<GetMovieDetailResponse> GetMovieDetailAsync(GetMovieDetailRequest request);
     }
 }

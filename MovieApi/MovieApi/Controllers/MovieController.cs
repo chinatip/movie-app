@@ -31,6 +31,19 @@ namespace MovieApi.Controllers
 
             return Ok(movies);
         }
+        [HttpGet("movies2")]
+        public async Task<ActionResult<GetMovieListResponse2>> GetMovieListAsync2()
+        {
+            var movies = await _movieService.GetMovieListAsync2();
+
+            if (movies == null)
+            {
+                return NotFound("No movies found.");
+            }
+
+            return Ok(movies);
+        }
+
 
         [HttpPost("movie")]
         public async Task<ActionResult<GetMovieDetailResponse>> GetMovieDetailAsync([FromBody] GetMovieDetailRequest request)
