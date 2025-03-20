@@ -46,6 +46,18 @@ A web application that compares movie prices from multiple providers and display
 
 ### **Desktop Preview**
 ![Desktop Screenshot 1](screenshots/desktop1.png) ![Desktop Screenshot 2](screenshots/desktop2.png)
+
+---
+
+## **PR Updates**
+### ** Another PR was made after the submission deadline**
+[PR Link](https://github.com/chinatip/movie-app/pull/11)
+
+
+#### **This PR includes the following updates:**
+- Updated `GetMovieList` to include prices and merged `GetMovieList` with `GetMovieDetail`.
+- Updated the UI to call only `GetMovieList` for data retrieval.
+
 ---
 
 ### **Additional Notes**
