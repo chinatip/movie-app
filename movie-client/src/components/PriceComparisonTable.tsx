@@ -26,7 +26,7 @@ export const PriceComparisonTable: React.FC<{
               key={index}
               className="px-4 py-2 text-center border border-gray-300"
             >
-              {priceItem.priceValue}
+              {priceItem.value}
             </td>
           ))}
         </tr>

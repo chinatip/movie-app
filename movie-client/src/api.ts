@@ -6,7 +6,7 @@ export const API_URL = "/api";
 
 export async function GetMovieList(): Promise<GetMovieListResponse> {
   try {
-    const response = await fetch(`${API_URL}/movies2`);
+    const response = await fetch(`${API_URL}/movies`);
 
     if (!response.ok) throw new Error("Failed to fetch movies");
 
